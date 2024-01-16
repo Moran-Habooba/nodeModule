@@ -1,28 +1,17 @@
-// const ENVIRONMENT = process.env.NODE_ENV;
-
-// const connectToDb = () => {
-//   if (ENVIRONMENT === "development") require("./mongoLocal");
-//   if (ENVIRONMENT === "production") require("./mongoAtlas");
-// };
-
-// module.exports = connectToDb;
-
+const { mongo } = require("../configs/config");
 const mongoose = require("mongoose");
-const ENVIRONMENT = process.env.NODE_ENV;
 
-const connectToDb = () => {
-  let dbConnectionString;
+async function connect() {
+  const uri = `${mongo.uri}${mongo.uri.at(-1) === "/" ? "" : "/"}${
+    mongo.dbName
+  }`;
 
-  if (ENVIRONMENT === "development") {
-    dbConnectionString = require("./mongoLocal");
-  } else if (ENVIRONMENT === "production") {
-    dbConnectionString = require("./mongoAtlas");
-  }
+  console.log(`connecting to db: ${uri}`);
 
-  return mongoose.connect(dbConnectionString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-};
+  return mongoose
+    .connect(uri)
+    .then(() => console.log("connected to db"))
+    .catch((err) => console.log("could not connect to db", err.message));
+}
 
-module.exports = connectToDb;
+module.exports = { connect };

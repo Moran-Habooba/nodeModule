@@ -47,6 +47,14 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
     },
+    loginAttempts: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    lockUntil: {
+      type: Date,
+    },
   },
   {
     methods: {
@@ -59,7 +67,25 @@ const userSchema = new mongoose.Schema(
     },
   }
 );
+
 const User = mongoose.model("User", userSchema, "users");
+
+// Locking a user for 24 hours after entering an incorrect password 3 times in a row
+userSchema.methods.incrementLoginAttempts = function () {
+  if (this.lockUntil && this.lockUntil > Date.now()) {
+    return;
+  }
+  this.loginAttempts += 1;
+  if (this.loginAttempts >= 3) {
+    this.lockUntil = Date.now() + 24 * 60 * 60 * 1000;
+  }
+  return this.save();
+};
+userSchema.methods.resetLoginAttempts = function () {
+  this.loginAttempts = 0;
+  this.lockUntil = null;
+  return this.save();
+};
 
 function validateUser(user) {
   const schema = Joi.object({

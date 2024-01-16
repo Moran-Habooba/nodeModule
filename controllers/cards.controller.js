@@ -1,7 +1,6 @@
 const { Card, validateCard } = require("../models/cards.model");
 const { User } = require("../models/users.model");
 const { generateRandomBizNumber } = require("../utils/generateRandomBizNumber");
-const { handleError } = require("../utils/handleErrors");
 const mongoose = require("mongoose");
 
 async function addCard(req, res) {

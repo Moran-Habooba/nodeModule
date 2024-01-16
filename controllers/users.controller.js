@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { handleError } = require("../utils/handleErrors");
 const { User, validateUser } = require("../models/users.model");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
@@ -32,17 +31,15 @@ async function addUser(req, res) {
 async function getAllUsers(req, res) {
   try {
     if (!req.user.isAdmin) {
-      return handleError(
-        res,
-        403,
-        "Access denied. Only admin users can access this data."
-      );
+      return res
+        .status(403)
+        .send("Access denied. Only admin users can access this data.");
     }
 
     const users = await User.find().select("-password");
     res.json(users);
   } catch (error) {
-    return handleError(res, 500, "An error occurred: " + error.message);
+    return res.status(500).send("An error occurred.");
   }
 }
 
@@ -52,26 +49,24 @@ async function getUserById(req, res) {
     const requestingUser = req.user;
 
     if (!mongoose.Types.ObjectId.isValid(requestedUserId)) {
-      return handleError(res, 400, "Invalid user ID.");
+      return res.status(400).send("Invalid user ID.");
     }
 
     if (!requestingUser.isAdmin && requestingUser._id !== requestedUserId) {
-      return handleError(
-        res,
-        403,
-        "Access denied. You can only access your own data."
-      );
+      return res
+        .status(403)
+        .send("Access denied. You can only access your own data.");
     }
 
     const user = await User.findById(requestedUserId).select("-password");
 
     if (!user) {
-      return handleError(res, 404, "User not found.");
+      return res.status(404).send("User not found.");
     }
 
     res.json(user);
   } catch (error) {
-    handleError(res, 500, "An error occurred: " + error.message);
+    return res.status(500).send("An error occurred.");
   }
 }
 
@@ -81,7 +76,7 @@ async function editUser(req, res) {
     const userToUpdate = await User.findById(userId);
 
     if (!userToUpdate) {
-      return handleError(res, 404, "User not found.");
+      return res.status(404).send("User not found.");
     }
 
     const updateData = { ...req.body };
@@ -95,7 +90,7 @@ async function editUser(req, res) {
 
     res.json(updatedUser);
   } catch (error) {
-    handleError(res, 500, "An error occurred: " + error.message);
+    return res.status(500).send("An error occurred: " + error.message);
   }
 }
 
@@ -111,12 +106,12 @@ async function changeStatus(req, res) {
     ).select("-password");
 
     if (!updatedUser) {
-      return handleError(res, 404, "User not found.");
+      return res.status(404).send("User not found.");
     }
 
     res.json({ isBusiness: updatedUser.isBusiness });
   } catch (error) {
-    handleError(res, 500, "An error occurred: " + error.message);
+    return res.status(500).send("An error occurred: " + error.message);
   }
 }
 async function deleteUserById(req, res) {
@@ -125,7 +120,7 @@ async function deleteUserById(req, res) {
     const user = req.user;
 
     if (!user.isAdmin && userId !== user._id) {
-      return handleError(res, 404, "Access denied.");
+      return res.status(403).send("Access denied.");
     }
 
     const deletedUser = await User.findOneAndDelete({ _id: userId });
@@ -136,7 +131,7 @@ async function deleteUserById(req, res) {
 
     res.json("User deleted successfully.");
   } catch (error) {
-    handleError(res, 500, "An error occurred: " + error.message);
+    return res.status(500).send("An error occurred: " + error.message);
   }
 }
 
@@ -155,21 +150,20 @@ async function promoteUserToAdmin(req, res) {
       ).select("-password");
 
       if (!updatedUser) {
-        return handleError(res, 404, "User not found.");
+        return res.status(404).send("User not found.");
       }
 
       res.json({ isAdmin: updatedUser.isAdmin });
     } else {
-      return handleError(
-        res,
-        403,
-        "Access denied. Only admin users can change user status."
-      );
+      return res
+        .status(403)
+        .send("Access denied. Only admin users can change user status.");
     }
   } catch (error) {
-    handleError(res, 500, "An error occurred: " + error.message);
+    return res.status(500).send("An error occurred: " + error.message);
   }
 }
+
 module.exports = {
   addUser,
   getAllUsers,

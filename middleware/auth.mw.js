@@ -47,6 +47,7 @@ function authorize(req, res, next) {
     res.status(400).send("Invalid token.");
   }
 }
+
 module.exports = {
   authorize,
 };

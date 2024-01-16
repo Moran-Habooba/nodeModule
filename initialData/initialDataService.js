@@ -1,43 +1,85 @@
-const { default: mongoose } = require("mongoose");
 const { users, cards } = require("./initialData.json");
+const { User } = require("../models/users.model");
+const { Card } = require("../models/cards.model");
+// const generateRandomBizNumber = require("../utils/generateRandomBizNumber");
+const _ = require("lodash");
 
-require("../db/dbService")().then(init);
+if (require.main === module) {
+  const args = {
+    fullReset: ["--full-reset", "-fr"].includes(process.argv[2]),
+  };
 
-function init() {
-  //   console.log(mongoose.connection);
+  require("../configs/loadEnvs");
+
+  require("../db/dbService")
+    .connect()
+    .then(() => seed({ fullReset: args.fullReset }));
 }
 
-// const mongoose = require("mongoose");
-// const User = require("../models/users.model");
-// const Card = require("../models/cards.model");
-// const initialData = require("./initialData.json");
-
-// async function generateInitialUsers(usersData) {
-//   for (const user of usersData) {
-//     const existingUser = await User.findOne({ email: user.email });
-//     if (!existingUser) {
-//       const newUser = new User(user);
-//       await newUser.save();
-//     }
+// async function seed({ fullReset = false } = {}) {
+//   if (fullReset) {
+//     await Promise.all([User.deleteMany({}), Card.deleteMany({})]);
 //   }
+
+//   await generateUsers().then((users) =>
+//     Promise.all(users.map((user) => generateCards(user._id)))
+//   );
+
+//   console.log("seeded");
 // }
 
-// async function generateInitialCards(cardsData) {
-//   const businessUsers = await User.find({ isBusiness: true });
-
-//   for (const card of cardsData) {
-//     const existingCard = await Card.findOne({ bizNumber: card.bizNumber });
-//     if (!existingCard) {
-//       const user = businessUsers.find((u) => u.email === card.userEmail);
-//       if (user) {
-//         const newCard = new Card({ ...card, user_id: user._id });
-//         await newCard.save();
-//       }
-//     }
+// async function generateUsers() {
+//   const Ps = [];
+//   for (const user of users) {
+//     Ps.push(new User(user).save());
 //   }
+
+//   return await Promise.all(Ps);
 // }
 
-// module.exports = {
-//   generateInitialCards,
-//   generateInitialUsers,
-// };
+// async function generateCards(user_id) {
+//   const Ps = [];
+//   for (const card of cards) {
+//     Ps.push(new Card({ ...card, user_id }));
+//   }
+
+//   return await Promise.all(Ps);
+// }
+
+async function seed({ fullReset = false } = {}) {
+  if (fullReset) {
+    await Promise.all([User.deleteMany({}), Card.deleteMany({})]);
+  }
+
+  const createdUsers = await generateUsers();
+
+  const firstBusinessUser = createdUsers.find((user) => user.isBusiness);
+
+  if (firstBusinessUser) {
+    await generateCards(firstBusinessUser._id);
+  }
+
+  console.log("seeded");
+}
+
+async function generateUsers() {
+  const Ps = [];
+  for (const user of users) {
+    const newUser = await new User(user).save();
+    Ps.push(newUser);
+  }
+
+  return await Promise.all(Ps);
+}
+async function generateCards(user_id) {
+  const Ps = [];
+  for (const card of cards) {
+    const newCard = await new Card(card).save();
+    newCard.user_id = user_id;
+    Ps.push(newCard);
+  }
+
+  return await Promise.all(Ps);
+}
+
+module.exports = { seed };

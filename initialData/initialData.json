@@ -17,6 +17,7 @@
     {
       "name": { "first": "business", "last": "user" },
       "isBusiness": true,
+
       "phone": "050-7777777",
       "email": "business@gmail.com",
       "password": "Mm123456!",
@@ -30,7 +31,8 @@
     },
     {
       "name": { "first": "admin", "last": "user" },
-      "isBusiness": true,
+      "isBusiness": false,
+
       "isAdmin": true,
       "phone": "050-7777777",
       "email": "admin@gmail.com",
@@ -46,13 +48,13 @@
   ],
   "cards": [
     {
+      "bizNumber": 1111111,
       "title": "first card",
       "subtitle": "this is the first card",
       "description": "this is the first card in the database",
       "phone": "050-8888888",
       "email": "firstCard@gmail.com",
-      "user_id": "",
-      "bizNumber": "",
+      "user_id": "6376274068d78742d84f31d2",
       "web": "https://www.firstCard.co.il",
       "image": {
         "url": "",
@@ -69,12 +71,13 @@
     },
     {
       "title": "second card",
+      "bizNumber": 2222222,
+
       "subtitle": "this is the second card",
       "description": "this is the second card in the database",
       "phone": "050-8888888",
       "email": "secondCard@gmail.com",
-      "user_id": "",
-      "bizNumber": "",
+      "user_id": "6376274068d78742d84f31d2",
       "web": "https://www.secondCard.co.il",
       "image": {
         "url": "",
@@ -91,12 +94,12 @@
     },
     {
       "title": "third card",
+      "bizNumber": 3333333,
       "subtitle": "this is the third card",
       "description": "this is the third card in the database",
       "phone": "050-8888888",
       "email": "thirdCard@gmail.com",
-      "user_id": "",
-      "bizNumber": "",
+      "user_id": "6376274068d78742d84f31d2",
       "web": "https://www.thirdCard.co.il",
       "image": {
         "url": "",
