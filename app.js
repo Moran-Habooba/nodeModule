@@ -2,6 +2,8 @@ require("./configs/loadEnvs");
 const fs = require("fs");
 const path = require("path");
 const { seed } = require("./initialData/initialDataService");
+const cors = require("cors");
+const chalk = require("chalk");
 
 const express = require("express");
 const morgan = require("morgan");
@@ -12,6 +14,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.static("./public"));
+app.use(cors());
 
 app.use((req, res, next) => {
   const originalSend = res.send;
@@ -26,7 +29,7 @@ app.use((req, res, next) => {
 
       fs.appendFile(logFilename, logEntry, (err) => {
         if (err) {
-          console.error("Error writing to log file", err);
+          console.error(chalk.red("Error writing to log file", err));
         }
       });
     }
@@ -50,6 +53,6 @@ require("./db/dbService")
   .then(() => seed().catch(() => {}))
   .then(() => {
     app.listen(config.app.port, () => {
-      console.log(`listening on port ${config.app.port}`);
+      console.log(chalk.green(`listening on port ${config.app.port}`));
     });
   });

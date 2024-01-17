@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const chalk = require("chalk");
 
 // function authorize(req, res, next) {
 //   const token = req.header("x-auth-token");
@@ -28,7 +29,7 @@ function authorize(req, res, next) {
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("JWT payload:", payload);
+    console.log(chalk.red("JWT payload:", payload));
     req.user = payload;
 
     if (payload.role) {
@@ -43,7 +44,7 @@ function authorize(req, res, next) {
 
     next();
   } catch (err) {
-    console.error("Token verification error:", err);
+    console.error(chalk.red("Token verification error:", err));
     res.status(400).send("Invalid token.");
   }
 }

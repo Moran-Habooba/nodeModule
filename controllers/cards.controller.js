@@ -1,5 +1,4 @@
 const { Card, validateCard } = require("../models/cards.model");
-const { User } = require("../models/users.model");
 const { generateRandomBizNumber } = require("../utils/generateRandomBizNumber");
 const mongoose = require("mongoose");
 
@@ -66,7 +65,6 @@ async function deleteCard(req, res) {
         );
     }
 
-    // If the user is authorized, delete the card
     await Card.findByIdAndDelete(cardId);
 
     res.send("Card deleted successfully");
@@ -89,7 +87,7 @@ const getMyCards = async (req, res) => {
     }
     res.send(cards);
   } catch (error) {
-    console.error("Error fetching cards:", error);
+    console.error(chalk.red("Error fetching cards:", error));
     res.status(500).send("Error fetching cards: " + error.message);
   }
 };
@@ -143,17 +141,18 @@ const editCardById = async (req, res) => {
 };
 
 async function editBizNumberByAdmin(req, res) {
-  console.log("ff");
   try {
     const cardId = req.params.id;
-    const newBizNumber = req.body.bizNumber;
+    const newBizNumber = req.body.bizNumber.toString();
 
     if (!req.user.isAdmin) {
       return res
         .status(403)
         .send("Access denied. Only admins can perform this action.");
     }
-
+    if (newBizNumber.length !== 7) {
+      return res.status(400).send("The business number must be 7 digits.");
+    }
     const existingCard = await Card.findOne({ bizNumber: newBizNumber });
     if (existingCard) {
       return res.status(400).send("The business number is already taken.");
