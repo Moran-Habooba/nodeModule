@@ -36,21 +36,35 @@ Install the node_modules
 
 ```shell
 npm install
+```
 
 ## Running the Project
 
 - To start the application in production mode:
+
+```shell
+
   npm start
-  This sets NODE_ENV to 'production' and runs the app using Node.js.
+```
+
+This sets NODE_ENV to 'production' and runs the app using Node.js.
 
 - For development mode with auto-restart:
 
+```shell
+
 npm run dev
+```
+
 This sets NODE_ENV to 'development' and runs the app with nodemon for hot reloading.
 
 - To seed the database with initial data:
 
+```shell
+
 npm run seed-db
+```
+
 Runs the seeding script to populate your database with initial data.
 
 ## Usage
@@ -60,4 +74,7 @@ Runs the seeding script to populate your database with initial data.
 ## Contributing
 
 - Guidelines for contributing to the project.
+
+```
+
 ```
