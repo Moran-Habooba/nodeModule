@@ -1,12 +1,8 @@
-# Project Title: Lesson28-12-23
+# Project Title: node server App
 
-## Introduction
+## Description
 
-This Node.js project focuses on [Brief project description].
-
-## Features
-
-- [List the key features and functionalities of your project here]
+The project is a Node.js-based application designed for managing user and business-related data. It involves building a REST API, emphasizing on server-side development with a deep understanding of relevant technologies and libraries like Express.js, MongoDB, and others. Key features include user registration, login, content publication, and editing. The project also incorporates advanced features like a file logger for tracking errors and a security mechanism for temporary user account lockout. The application is structured to provide a comprehensive and secure user experience, focusing on clean, well-organized code and efficient data handling.
 
 ## Technologies Used
 
@@ -67,14 +63,148 @@ npm run seed-db
 
 Runs the seeding script to populate your database with initial data.
 
-## Usage
+## Available Routes
 
-- Instructions or examples on how to use your application.
+- Here you can find API addresses that the server will respond to:
 
-## Contributing
+  ### -users api
 
-- Guidelines for contributing to the project.
+Register a new user
+
+```shell
+  POST /api/users
 
 ```
 
+Login a user
+
+```shell
+POST /api/login
+
 ```
+
+Get my user(me)
+
+```shell
+GET /api/users/me
+```
+
+Get all users(only admin)
+
+```shell
+GET /api/users
+```
+
+Get user by id (only the registered user or admin)
+
+```shell
+GET /api/users/:id
+```
+
+Edit user by id (only the registered user)
+
+```shell
+PUT /api/users/edit/:id
+```
+
+Change user status(regular/business) (only the registered user)
+
+```shell
+PATCH /api/users/:id
+```
+
+Change user status to admin(Only an admin type user can make the request)
+
+```shell
+PATCH /api/users/admin/:id
+```
+
+Delete user
+
+```shell
+DELETE /api/users/:id
+```
+
+### -A link to requests in Postman includes a description of what should be put in the body of the request and examples
+
+[API Documentation](https://documenter.getpostman.com/view/27577545/2s9YsQ6UPy)
+
+### -cards api
+
+create card(Must be a business user to create cards)
+
+```shell
+POST /api/cards
+```
+
+Get all cards
+
+```shell
+GET /api/cards
+```
+
+Get card by id
+
+```shell
+GET /api/cards/id:
+```
+
+Delete card( only the user who created the card or admin)
+
+```shell
+Delete /api/cards/id:
+```
+
+Get my cards(only the registered user)
+
+```shell
+GET /api/cards/my-cards
+```
+
+Like card(only the registered user)
+
+```shell
+PATCH /api/cards/id:
+```
+
+Edit card( only the user who created the card )
+
+```shell
+PUT /api/cards/edit/id:
+```
+
+chang bizNumber( only admin )
+
+```shell
+PATCH /api/cards/editBiz/id:
+```
+
+### -A link to requests in Postman includes a description of what should be put in the body of the request and examples
+
+[API Documentation](https://documenter.getpostman.com/view/27577545/2s9YsQ6UF7)
+
+## Security Features
+
+### Temporary Account Lock
+
+If a user attempts to log in with the same email address and fails due to incorrect password entry three consecutive times, their account will be temporarily locked for a period of 24 hours. This measure is designed to prevent unauthorized access attempts and safeguard user data.
+
+#### How it Works:
+
+- **Lockout Trigger**: After three consecutive failed login attempts with the same email.
+- **Lockout Duration**: The user's account will be locked for 24 hours.
+- **Account Recovery**: Users can contact support for assistance or wait until the lockout period expires to regain access.
+
+## Application Logging
+
+### Error Logging
+
+Our application includes an advanced error logging system to enhance monitoring and debugging. This system automatically captures and logs all requests that result in a status code of 400 or higher.
+
+#### Features:
+
+- **Log File Creation**: For each day, the logger creates a new log file in the `logs` directory. The log file is named after the current date (e.g., `2024-01-17.log`). If a file with that date already exists, the logger appends to the existing file.
+- **Log Content**: Each log entry includes the date and time of the request, the response status code, and the error message.
+- **Log Directory**: All logs are stored in the `logs` directory at the root of the application.
+
+This logging system ensures that all critical errors are recorded, aiding in quick identification and resolution of issues affecting our users.

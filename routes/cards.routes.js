@@ -31,6 +31,6 @@ router.get("/:id", getCardById);
 router.delete("/:id", authorize, deleteCard);
 router.patch("/:id", authorize, likeCard);
 router.put("/edit/:id", authorize, editCardById);
-router.put("/editBiz/:id", authorize, editBizNumberByAdmin);
+router.patch("/editBiz/:id", authorize, editBizNumberByAdmin);
 
 module.exports = router;

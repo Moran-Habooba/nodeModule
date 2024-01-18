@@ -29,7 +29,8 @@ function authorize(req, res, next) {
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(chalk.red("JWT payload:", payload));
+    console.log(chalk.blue("JWT payload:", JSON.stringify(payload, null, 2)));
+
     req.user = payload;
 
     if (payload.role) {
