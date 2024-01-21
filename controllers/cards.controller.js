@@ -127,7 +127,9 @@ const editCardById = async (req, res) => {
     if (!card) {
       return res
         .status(403)
-        .send("You do not have permission to edit this card.");
+        .send(
+          "You do not have permission to edit this card.Only the user who created the card can edit it"
+        );
     }
 
     const updatedCard = await Card.findByIdAndUpdate(cardId, req.body, {

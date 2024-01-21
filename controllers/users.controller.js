@@ -73,6 +73,14 @@ async function getUserById(req, res) {
 async function editUser(req, res) {
   try {
     const userId = req.params.id;
+    const requestingUser = req.user;
+
+    if (!requestingUser || requestingUser._id !== userId) {
+      return res
+        .status(403)
+        .send("Access denied. You can only edit your own profile.");
+    }
+
     const userToUpdate = await User.findById(userId);
 
     if (!userToUpdate) {
@@ -97,7 +105,16 @@ async function editUser(req, res) {
 async function changeStatus(req, res) {
   try {
     const userId = req.params.id;
+    const requestingUser = req.user;
     const { isBusiness } = req.body;
+
+    if (!requestingUser || requestingUser._id !== userId) {
+      return res
+        .status(403)
+        .send(
+          "Access denied. You can only change the status of your own account."
+        );
+    }
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -114,6 +131,7 @@ async function changeStatus(req, res) {
     return res.status(500).send("An error occurred: " + error.message);
   }
 }
+
 async function deleteUserById(req, res) {
   try {
     const userId = req.params.id;
