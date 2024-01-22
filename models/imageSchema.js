@@ -11,7 +11,7 @@ const imageSchema = new mongoose.Schema({
   },
   alt: {
     type: String,
-    maxLength: 256,
+    maxLength: 255,
     trim: true,
     lowercase: true,
     default: "",
