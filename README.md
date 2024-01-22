@@ -48,22 +48,6 @@ You will need 2 .env files:
   npm start
 ```
 
-This sets NODE_ENV to 'development' and runs the app with nodemon for hot reloading.
-
-- To seed the database with initial data:
-
-```shell
-
-npm run seed-db
-```
-
-and after:
-
-```shell
-
-npm run dev
-```
-
 This sets NODE_ENV to 'production' and runs the app using Node.js.
 
 - For development mode with auto-restart:
@@ -71,6 +55,15 @@ This sets NODE_ENV to 'production' and runs the app using Node.js.
 ```shell
 
 npm run dev
+```
+
+This sets NODE_ENV to 'development' and runs the app with nodemon for hot reloading.
+
+- To seed the database with initial data:
+
+```shell
+
+npm run seed-db
 ```
 
 Runs the seeding script to populate your database with initial data.
