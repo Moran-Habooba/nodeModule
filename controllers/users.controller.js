@@ -138,7 +138,11 @@ async function deleteUserById(req, res) {
     const user = req.user;
 
     if (!user.isAdmin && userId !== user._id) {
-      return res.status(403).send("Access denied.");
+      return res
+        .status(403)
+        .send(
+          "Access denied.Only an admin user may delete users or The user the account belongs to"
+        );
     }
 
     const deletedUser = await User.findOneAndDelete({ _id: userId });

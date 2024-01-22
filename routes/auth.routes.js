@@ -17,7 +17,11 @@ router.post("/", async (req, res) => {
   }
 
   if (user.lockUntil && user.lockUntil > Date.now()) {
-    return res.status(401).send("Account is temporarily locked");
+    return res
+      .status(401)
+      .send(
+        "Account is temporarily locked Contact management or wait 24 hours"
+      );
   }
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
@@ -26,7 +30,9 @@ router.post("/", async (req, res) => {
     if (user.loginAttempts >= 3) {
       user.lockUntil = Date.now() + 24 * 60 * 60 * 1000;
       await user.save();
-      return res.status(401).send("Account is temporarily locked");
+      return res
+        .status(401)
+        .send("Account is temporarily locked Account is temporarily locked");
     } else {
       await user.save();
       res.status(400).send("Invalid email or password");

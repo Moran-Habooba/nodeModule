@@ -34,6 +34,11 @@ Install the node_modules
 npm install
 ```
 
+You will need 2 .env files:
+
+1. .env.development
+2. .env.production
+
 ## Running the Project
 
 - To start the application in production mode:
